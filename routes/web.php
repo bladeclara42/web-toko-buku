@@ -13,10 +13,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/', [BookController::class, 'index'])->name('home');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
+    Route::get('/transaction/{book}', [TransactionController::class, 'create'])->name('transaction.create');
+    Route::post('/transaction', [TransactionController::class, 'store'])->name('transaction.store');
+    Route::get('/invoice/{transaction}', [TransactionController::class, 'invoice'])->name('transaction.invoice');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/books/create', [BookController::class, 'create'])->name('books.create');
+    Route::post('/admin/books', [BookController::class, 'store'])->name('books.store');
+});
