@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('book_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
-            $table->decimal('price', 10, 2);
+            $table->integer('price');
             $table->timestamps();
         });
     }
@@ -30,6 +30,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('order_items', function (Blueprint $table) {
+            $table->dropForeign(['order_id']);
+            $table->dropForeign(['book_id']);
+        });
         Schema::dropIfExists('order_items');
     }
 };

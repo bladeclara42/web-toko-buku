@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->date('order_date');
-            $table->decimal('subtotal', 10, 2);
-            $table->decimal('shipping', 10, 2);
-            $table->decimal('total', 10, 2);
-            $table->string('status');
+            $table->foreignId('author_id')->constrained()->onDelete('cascade');
+            $table->foreignId('publisher_id')->constrained()->onDelete('cascade');
+            $table->foreignId('condition_id')->constrained()->onDelete('cascade');
+            $table->string('type');
+            $table->integer('price');
+            $table->year('published_year');
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('books');
     }
 };
