@@ -18,6 +18,10 @@ return new class extends Migration
             $table->foreignId('author_id')->constrained()->onDelete('cascade');
             $table->foreignId('publisher_id')->constrained()->onDelete('cascade');
             $table->foreignId('condition_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->string('cover')->nullable();
+            $table->text('description')->nullable();
+            $table->integer('pages');
             $table->string('type');
             $table->integer('price');
             $table->year('published_year');
