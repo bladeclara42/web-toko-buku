@@ -1,6 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\PublisherController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,21 +25,25 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('/', [BookController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::get('/', [BookController::class, 'index'])->name('home');
+Route::get('/books/create', [BookController::class, 'create'])->name ('books.create');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
-    Route::get('/transaction/{book}', [TransactionController::class, 'create'])->name('transaction.create');
-    Route::post('/transaction', [TransactionController::class, 'store'])->name('transaction.store');
-    Route::get('/invoice/{transaction}', [TransactionController::class, 'invoice'])->name('transaction.invoice');
+    Route::get('/order/{book}', [OrderItemController::class, 'create'])->name('order.create');
+    Route::post('/order', [OrderItemController::class, 'store'])->name('order.store');
+    Route::get('/invoice/{orderItem}', [OrderItemController::class, 'invoice'])->name('order.invoice');
 });
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/books/create', [BookController::class, 'create'])->name('books.create');
-    Route::post('/admin/books', [BookController::class, 'store'])->name('books.store');
+Route::middleware(['auth', 'can:admin'])->group(function () {
+    Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
+    Route::post('/books', [BookController::class, 'store'])->name('books.store');
+    Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
+    Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
+    Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
+    Route::resource('authors', AuthorController::class)->except(['show']);
+    Route::resource('publishers', PublisherController::class)->except(['show']);
 });
