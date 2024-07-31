@@ -6,6 +6,8 @@ use App\Models\Book;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvoiceMail;
 
 class OrderItemController extends Controller
 {
@@ -42,10 +44,12 @@ class OrderItemController extends Controller
             'order_id' => $order->id,
             'book_id' => $request->book_id,
             'quantity' => $request->quantity,
-            'price' => $book->price, // Use book price per item
+            'price' => $book->price, 
         ]);
 
         $book->decrement('stock', $request->quantity);
+
+        Mail::to(auth()->user()->email)->send(new InvoiceMail($orderItem));
 
         return redirect()->route('order.invoice', $orderItem);
     }
