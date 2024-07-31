@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('title');
             $table->string('cover')->nullable();
             $table->text('description')->nullable();
-            $table->integer('pages');
             $table->string('type');
             $table->integer('price');
             $table->year('published_year');
+            $table->integer('stock');
             $table->timestamps();
         });
     }
