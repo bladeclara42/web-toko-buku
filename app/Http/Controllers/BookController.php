@@ -7,6 +7,7 @@ use App\Models\Author;
 use App\Models\Publisher;
 use App\Models\Condition;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -44,10 +45,9 @@ class BookController extends Controller
             'condition_id' => 'required|exists:conditions,id',
         ]);
 
+        $coverPath = null;
         if ($request->hasFile('cover')) {
             $coverPath = $request->file('cover')->store('covers', 'public');
-        } else {
-            $coverPath = null;
         }
 
         Book::create([
@@ -90,6 +90,9 @@ class BookController extends Controller
         ]);
 
         if ($request->hasFile('cover')) {
+            if ($book->cover) {
+                Storage::delete('public/' . $book->cover);
+            }
             $coverPath = $request->file('cover')->store('covers', 'public');
         } else {
             $coverPath = $book->cover;
@@ -113,6 +116,9 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
+        if ($book->cover) {
+            Storage::delete('public/' . $book->cover);
+        }
         $book->delete();
         return redirect()->route('home');
     }
