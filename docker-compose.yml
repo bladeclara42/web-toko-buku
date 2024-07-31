@@ -27,6 +27,9 @@ services:
             - DB_DATABASE=db_toko_buku
             - DB_USERNAME=root
             - DB_PASSWORD=
+            - MAIL_USERNAME=a4645a9ada7ded
+            - MAIL_PASSWORD=c8fea310bd61bc
+
         ports:
             - "8000:80"
         depends_on:
