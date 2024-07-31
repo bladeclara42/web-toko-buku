@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             AuthorsTableSeeder::class,
             PublishersTableSeeder::class,
-            BookConditionsTableSeeder::class,
+            ConditionsTableSeeder::class,
             BooksTableSeeder::class,
             OrdersTableSeeder::class,
             OrderItemsTableSeeder::class,
